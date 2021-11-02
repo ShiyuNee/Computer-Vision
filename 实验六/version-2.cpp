@@ -25,6 +25,8 @@ void init(){
     cvtColor(source_image,binary_image , COLOR_RGB2GRAY);
     Canny(binary_image , target_image , thread_1 , thread_2);
     memset(H , 0 , sizeof(H));
+    Sobel( binary_image, dx, CV_32F, 1, 0 , 3 );
+    Sobel( binary_image , dy, CV_32F, 0, 1 , 3 );
 }
 
 
@@ -70,15 +72,11 @@ int main()
 {
     namedWindow("Target Window", WINDOW_AUTOSIZE);
     init();
-    Sobel( binary_image, dx, CV_32F, 1, 0 , 3 );
-    Sobel( binary_image , dy, CV_32F, 0, 1 , 3 );
-
     createTrackbar("thread_1", "Target Window", &thread_1, 200, changeThread , 0);
     createTrackbar("thread_2", "Target Window", &thread_2, 200, changeThread , 0);
     createTrackbar("thread_3", "Target Window", &thread_3, 100, changeThread , 0);
     createTrackbar("R_min", "Target Window", &R_min, 100, changeThread , 0);
     createTrackbar("R_max", "Target Window", &R_max, 400, changeThread , 0);
-
     waitKey(0);
 }
 
