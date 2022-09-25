@@ -12,14 +12,13 @@ int main(){
 
     source_image = imread("D:\\cLion\\project\\02.jpg");
     bg_image = imread("D:\\cLion\\project\\02_bg.jpg");
-    if (!source_image.data || !bg_image.data)
-    {
-        cout << "读取图片失败！" << endl;
+    if (!source_image.data || !bg_image.data){
+        cout << "fail load！" << endl;
         return -1;
     }
 
     if (source_image.rows != bg_image.rows || source_image.cols != bg_image.cols)
-        cout << "前景图与后景图尺寸不符，无法相减！" << endl;
+        cout << "images not match！" << endl;
 
     Mat transformed_image = Mat::zeros(source_image.size(), source_image.type());
 
@@ -28,29 +27,19 @@ int main(){
     double sum = 0.0;
 
     for (int y = 0; y < source_image.rows; y++)
-    {
-        for (int x = 0; x < source_image.cols; x++)
-        {
+        for (int x = 0; x < source_image.cols; x++){
             sum = 0.0;
-            for (int c = 0; c < 3; c++)
-            {
-                sum += pow((source_image.at<Vec3b>(y, x)[c] - bg_image.at<Vec3b>(y, x)[c]), 2);
-            }
+            for (int c = 0; c < 3; c++) sum += pow((source_image.at<Vec3b>(y, x)[c] - bg_image.at<Vec3b>(y, x)[c]), 2);
             sum = sqrt(sum);
-            if (sum >= 90) {
+            if (sum >= 90){
                 for (int c = 0; c < 3; c++)
-                {
-                    transformed_image.at<Vec3b>(y, x)[c] = saturate_cast < uchar>(255);
-                }
+                    transformed_image.at<Vec3b>(y, x)[c] = saturate_cast <uchar>(255);
             }
             else {
                 for (int c = 0; c < 3; c++)
-                {
-                    transformed_image.at<Vec3b>(y, x)[c] = saturate_cast < uchar>(0);
-                }
+                    transformed_image.at<Vec3b>(y, x)[c] = saturate_cast <uchar>(0);
             }
         }
-    }
     imshow("Display Window", transformed_image);
     waitKey(0);
     return 0;
